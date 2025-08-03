@@ -12,7 +12,7 @@ fi
 # :command.root_command
 root_command() {
   # src/root_command.sh
-  max_number="${args[--max]}"
+  max_number="${args[--max]:-32767}"
 
   if [[ "${args[--web]}" == 1 ]]; then
     curl \

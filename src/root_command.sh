@@ -1,4 +1,4 @@
-max_number="${args[--max]}"
+max_number="${args[--max]:-32767}"
 
 if [[ "${args[--web]}" == 1 ]]; then
   curl \
