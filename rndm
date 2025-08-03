@@ -148,6 +148,20 @@ parse_requirements() {
     esac
   done
 
+  # :command.dependencies_filter
+  missing_deps=
+  # :dependency.filter
+  if ! command -v curl >/dev/null 2>&1; then
+    printf "missing dependency: curl\n" >&2
+    missing_deps=1
+  else
+    deps['curl']="$(command -v curl | head -n1)"
+  fi
+
+  if [[ -n $missing_deps ]]; then
+    exit 1
+  fi
+
   # :command.command_filter
   action="root"
 
