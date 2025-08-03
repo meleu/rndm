@@ -9,3 +9,6 @@ flags:
   - long: --web
     short: -w
     help: Get the random number from <https://random.org>.
+  - long: --max
+    arg: max
+    help: Specifies the maximum number to be generated

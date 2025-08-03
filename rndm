@@ -12,13 +12,15 @@ fi
 # :command.root_command
 root_command() {
   # src/root_command.sh
+  max_number="${args[--max]}"
+
   if [[ "${args[--web]}" == 1 ]]; then
     curl \
       --silent \
       --location \
-      "https://www.random.org/integers/?num=1&min=0&max=32767&col=1&base=10&format=plain"
+      "https://www.random.org/integers/?num=1&min=0&max=${max_number}&col=1&base=10&format=plain"
   else
-    echo "$RANDOM"
+    echo $((RANDOM % max_number + 1))
   fi
 
 }
@@ -46,6 +48,11 @@ rndm_usage() {
     # :flag.usage
     printf "  %s\n" "--web, -w"
     printf "    Get the random number from <https://random.org>.\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--max MAX"
+    printf "    Specifies the maximum number to be generated\n"
     echo
 
     # :command.usage_fixed_flags
@@ -175,6 +182,20 @@ parse_requirements() {
         # :flag.case_no_arg
         args['--web']=1
         shift
+        ;;
+
+      # :flag.case
+      --max)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--max']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--max requires an argument: --max MAX" >&2
+          exit 1
+        fi
         ;;
 
       -?*)
