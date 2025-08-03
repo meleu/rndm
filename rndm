@@ -12,7 +12,7 @@ fi
 # :command.root_command
 root_command() {
   # src/root_command.sh
-  max_number="${args[--max]:-32767}"
+  max_number="${args[--max]}"
 
   if [[ "${args[--web]}" == 1 ]]; then
     curl \
@@ -53,6 +53,7 @@ rndm_usage() {
     # :flag.usage
     printf "  %s\n" "--max MAX"
     printf "    Specifies the maximum number to be generated\n"
+    printf "    %s\n" "Default: 32767"
     echo
 
     # :command.usage_fixed_flags
@@ -213,6 +214,9 @@ parse_requirements() {
 
     esac
   done
+
+  # :command.default_assignments
+  [[ -n ${args['--max']:-} ]] || args['--max']="32767"
 
 }
 
