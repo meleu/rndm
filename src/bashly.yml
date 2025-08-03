@@ -1,3 +1,7 @@
 name: rndm
 help: Prints a random number
 version: 0.0.1
+
+flags:
+  - long: --web
+    help: Get the random number from <https://random.org>.
