@@ -44,7 +44,7 @@ rndm_usage() {
 
     # :command.usage_flags
     # :flag.usage
-    printf "  %s\n" "--web"
+    printf "  %s\n" "--web, -w"
     printf "    Get the random number from <https://random.org>.\n"
     echo
 
@@ -170,7 +170,7 @@ parse_requirements() {
     key="$1"
     case "$key" in
       # :flag.case
-      --web)
+      --web | -w)
 
         # :flag.case_no_arg
         args['--web']=1

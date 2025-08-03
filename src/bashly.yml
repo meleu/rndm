@@ -7,4 +7,5 @@ dependencies:
 
 flags:
   - long: --web
+    short: -w
     help: Get the random number from <https://random.org>.
