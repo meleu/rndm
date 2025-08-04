@@ -10,7 +10,14 @@ flags:
     short: -w
     help: Get the random number from <https://random.org>.
   - long: --max
+    short: -M
     arg: max
     help: Specifies the maximum number to be generated
     default: "32767"
+    validate: positive_integer
+  - long: --min
+    short: -m
+    arg: min
+    help: Specifies the minimum number to be generated
+    default: "1"
     validate: positive_integer

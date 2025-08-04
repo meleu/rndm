@@ -13,14 +13,16 @@ fi
 root_command() {
   # src/root_command.sh
   max_number="${args[--max]}"
+  min_number="${args[--min]}"
 
   if [[ "${args[--web]}" == 1 ]]; then
     curl \
       --silent \
       --location \
-      "https://www.random.org/integers/?num=1&min=0&max=${max_number}&col=1&base=10&format=plain"
+      "https://www.random.org/integers/?num=1&min=${min_number}&max=${max_number}&col=1&base=10&format=plain"
   else
-    echo $((RANDOM % max_number + 1))
+    range=$((max_number - min_number + 1))
+    echo $((RANDOM % range + min_number))
   fi
 
 }
@@ -51,9 +53,15 @@ rndm_usage() {
     echo
 
     # :flag.usage
-    printf "  %s\n" "--max MAX"
+    printf "  %s\n" "--max, -M MAX"
     printf "    Specifies the maximum number to be generated\n"
     printf "    %s\n" "Default: 32767"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--min, -m MIN"
+    printf "    Specifies the minimum number to be generated\n"
+    printf "    %s\n" "Default: 1"
     echo
 
     # :command.usage_fixed_flags
@@ -200,7 +208,7 @@ parse_requirements() {
         ;;
 
       # :flag.case
-      --max)
+      --max | -M)
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
@@ -208,7 +216,21 @@ parse_requirements() {
           shift
           shift
         else
-          printf "%s\n" "--max requires an argument: --max MAX" >&2
+          printf "%s\n" "--max requires an argument: --max, -M MAX" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --min | -m)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--min']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--min requires an argument: --min, -m MIN" >&2
           exit 1
         fi
         ;;
@@ -231,13 +253,23 @@ parse_requirements() {
 
   # :command.default_assignments
   [[ -n ${args['--max']:-} ]] || args['--max']="32767"
+  [[ -n ${args['--min']:-} ]] || args['--min']="1"
 
   # :command.validations
   # :flag.validations
   if [[ -v args['--max'] ]]; then
     validation_output="$(validate_positive_integer "${args['--max']:-}" 2>&1)"
     if [[ -n "${validation_output}" ]]; then
-      printf "validation error in %s:\n%s\n" "--max MAX" "$validation_output" >&2
+      printf "validation error in %s:\n%s\n" "--max, -M MAX" "$validation_output" >&2
+      exit 1
+    fi
+  fi
+
+  # :flag.validations
+  if [[ -v args['--min'] ]]; then
+    validation_output="$(validate_positive_integer "${args['--min']:-}" 2>&1)"
+    if [[ -n "${validation_output}" ]]; then
+      printf "validation error in %s:\n%s\n" "--min, -m MIN" "$validation_output" >&2
       exit 1
     fi
   fi
