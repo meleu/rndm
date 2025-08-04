@@ -13,3 +13,4 @@ flags:
     arg: max
     help: Specifies the maximum number to be generated
     default: "32767"
+    validate: positive_integer

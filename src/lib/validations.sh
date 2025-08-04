@@ -3,7 +3,6 @@ validate_positive_integer() {
 
   if ! is_positive_integer "$number"; then
     echo "The argument must be a positive integer. Given value: $number"
-    exit 1
   fi
 }
 

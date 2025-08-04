@@ -1,7 +1,5 @@
 max_number="${args[--max]}"
 
-validate_positive_integer "$max_number"
-
 if [[ "${args[--web]}" == 1 ]]; then
   curl \
     --silent \
